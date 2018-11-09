@@ -1,4 +1,4 @@
-import React, {PropTypes, Component} from 'react';
+import React, { PropTypes, Component } from 'react';
 
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -23,14 +23,14 @@ class DeploymentContainer extends Component {
     if (!_.get(this.props, 'auth.isAuth')) {
       let path = location.pathname;
       if (!_.isEmpty(location.search)) {
-        path += `?${location.search}`
+        path += `?${location.search}`;
       }
       this.props.actions.setBackHistory(path);
       this.props.actions.fetchAuth(true);
     }
   }
   render() {
-    const {appName, deploymentName, actions} = this.props;
+    const { appName, deploymentName, actions } = this.props;
     return (
       <Deployment appName={appName} deploymentName={deploymentName} />
     );
@@ -38,19 +38,20 @@ class DeploymentContainer extends Component {
 }
 
 function mapStateToProps(state, ownProps) {
+  console.log(state);
   return {
-    'auth': _.get(state, 'auth', {}),
-    'products': _.get(state, 'products', {})
+    auth: _.get(state, 'auth', {}),
+    products: _.get(state, 'products', {}),
   };
 }
 
 function mapDispatchToProps(dispatch, ownProps) {
   return {
-    actions: bindActionCreators(Object.assign({}, usersActions, authActions, routesActions), dispatch)
-  }
+    actions: bindActionCreators(Object.assign({}, usersActions, authActions, routesActions), dispatch),
+  };
 }
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
-)(DeploymentContainer)
+  mapDispatchToProps,
+)(DeploymentContainer);

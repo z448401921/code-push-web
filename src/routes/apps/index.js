@@ -1,7 +1,7 @@
 
 import React from 'react';
 import LayoutContainer from '../../containers/LayoutContainer';
-import { getProducts, fetchDeployments} from '../../actions/productsActions';
+import { getProducts, fetchDeployments } from '../../actions/productsActions';
 import _ from 'lodash';
 
 const apps = {
@@ -28,14 +28,18 @@ const deployments = {
   path: '/apps/:appName/:deploymentName',
 
   async action({ store, params }) {
+    const appName = _.get(params, 'appName');
     if (process.env.BROWSER) {
-      // setTimeout(() => {
-      //   store.dispatch(getProducts());
-      // }, 100);
+      /* setTimeout(() => {
+        store.dispatch(getProducts());
+      }, 100); */
+      setTimeout(() => {
+        store.dispatch(fetchDeployments(appName));
+      }, 100);
     }
-    var appName = _.get(params, 'appName');
-    var deploymentName = _.get(params, 'deploymentName');
+    const deploymentName = _.get(params, 'deploymentName');
     const DeploymentContainer = await require.ensure([], require => require('../../containers/DeploymentContainer').default, 'deployment');
+
     return {
       title: `${deploymentName} ${appName}`,
       chunk: 'deployment',
@@ -47,8 +51,8 @@ const deployments = {
 const appDetails = {
   path: '/apps/:appName',
 
-  async action({store, params}) {
-    var appName = _.get(params, 'appName');
+  async action({ store, params }) {
+    const appName = _.get(params, 'appName');
     if (process.env.BROWSER) {
       setTimeout(() => {
         store.dispatch(fetchDeployments(appName));
@@ -60,7 +64,7 @@ const appDetails = {
       chunk: 'product',
       component: <LayoutContainer><ProductContainer appName={appName} /></LayoutContainer>,
     };
-  }
-}
+  },
+};
 
-export {apps as default, deployments, appDetails}
+export { apps as default, deployments, appDetails };
